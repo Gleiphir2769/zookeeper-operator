@@ -110,7 +110,7 @@ func makeZkPodSpec(z *v1beta1.ZookeeperCluster, volumes []v1.Volume) v1.PodSpec 
 		Name:  "zookeeper",
 		Image: z.Spec.Image.ToString(),
 		Ports: z.Spec.Ports,
-		Env: []v1.EnvVar{
+		Env: append([]v1.EnvVar{
 			{
 				Name: "ENVOY_SIDECAR_STATUS",
 				ValueFrom: &v1.EnvVarSource{
@@ -119,7 +119,7 @@ func makeZkPodSpec(z *v1beta1.ZookeeperCluster, volumes []v1.Volume) v1.PodSpec 
 					},
 				},
 			},
-		},
+		}, *z.Spec.Env...),
 		ImagePullPolicy: z.Spec.Image.PullPolicy,
 		ReadinessProbe: &v1.Probe{
 			InitialDelaySeconds: z.Spec.Probes.ReadinessProbe.InitialDelaySeconds,
