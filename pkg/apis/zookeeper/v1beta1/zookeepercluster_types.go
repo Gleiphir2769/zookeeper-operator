@@ -157,7 +157,7 @@ type ZookeeperClusterSpec struct {
 	// +optional
 	Probes *Probes `json:"probes,omitempty"`
 
-	Env *[]v1.EnvVar `json:"env,omitempty"`
+	Env []v1.EnvVar `json:"env,omitempty"`
 }
 
 type Probes struct {
