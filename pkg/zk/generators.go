@@ -115,7 +115,7 @@ func makeZkPodSpec(z *v1beta1.ZookeeperCluster, volumes []v1.Volume) v1.PodSpec 
 			},
 		},
 	}
-	for _, e := range z.Spec.Env {
+	for _, e := range z.Spec.Pod.Env {
 		env = append(env, e)
 	}
 	zkContainer := v1.Container{
