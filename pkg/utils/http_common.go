@@ -56,7 +56,7 @@ func HTTPSPatch(url string, body interface{}, params map[string]string, headers 
 }
 
 func HTTPPut(url string, body interface{}, params map[string]string, headers map[string]string) (*http.Response, error) {
-	return HTTPRequestWithBody(url, body, params, headers, http.MethodPost)
+	return HTTPRequestWithBody(url, body, params, headers, http.MethodPut)
 }
 
 func HTTPRequestWithoutBody(url string, params map[string]string, headers map[string]string, method string) (*http.Response, error) {
