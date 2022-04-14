@@ -55,6 +55,10 @@ func HTTPSPatch(url string, body interface{}, params map[string]string, headers 
 	return HTTPSRequestWithBody(url, body, params, headers, http.MethodPatch, caPath)
 }
 
+func HTTPPut(url string, body interface{}, params map[string]string, headers map[string]string) (*http.Response, error) {
+	return HTTPRequestWithBody(url, body, params, headers, http.MethodPost)
+}
+
 func HTTPRequestWithoutBody(url string, params map[string]string, headers map[string]string, method string) (*http.Response, error) {
 	client := NewClient(time.Duration(TIMEOUT) * time.Second)
 	return requestWithoutBody(url, params, headers, method, client)

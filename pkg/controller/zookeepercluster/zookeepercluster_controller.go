@@ -644,6 +644,8 @@ func (r *ReconcileZookeeperCluster) reconcileClusterStatus(instance *zookeeperv1
 			err = utils.StatusChangedTrigger(target, instance.Name)
 			if err != nil {
 				r.log.Error(err, "Status changed trigger start failed")
+			} else {
+				r.log.Info("Triggered by status changed", "trigger.target", target, "instance.Name", instance.Name)
 			}
 		}
 	} else {
@@ -653,6 +655,8 @@ func (r *ReconcileZookeeperCluster) reconcileClusterStatus(instance *zookeeperv1
 			err = utils.StatusChangedTrigger(target, instance.Name)
 			if err != nil {
 				r.log.Error(err, "Status changed trigger start failed")
+			} else {
+				r.log.Info("Triggered by status changed", "trigger.target", target, "instance.Name", instance.Name)
 			}
 		}
 	}
