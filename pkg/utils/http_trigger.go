@@ -2,9 +2,10 @@ package utils
 
 import "fmt"
 
-func StatusChangedTrigger(target string, instanceName string) error {
+func StatusChangedTrigger(target string, instanceName string, namespace string) error {
 	params := make(map[string]string, 1)
 	params["instanceName"] = instanceName
+	params["namespace"] = namespace
 	resp, err := HTTPPut(target, nil, params, nil)
 	if err != nil {
 		return err

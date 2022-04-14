@@ -641,7 +641,7 @@ func (r *ReconcileZookeeperCluster) reconcileClusterStatus(instance *zookeeperv1
 		instance.Status.SetPodsReadyConditionTrue()
 		// add status trigger to inform the outside
 		if target := os.Getenv("STATUS_CHANGED_TRIGGER"); len(target) != 0 {
-			err = utils.StatusChangedTrigger(target, instance.Name)
+			err = utils.StatusChangedTrigger(target, instance.Name, instance.Namespace)
 			if err != nil {
 				r.log.Error(err, "Status changed trigger start failed")
 			} else {
@@ -652,7 +652,7 @@ func (r *ReconcileZookeeperCluster) reconcileClusterStatus(instance *zookeeperv1
 		instance.Status.SetPodsReadyConditionFalse()
 		// add status trigger to inform the outside
 		if target := os.Getenv("STATUS_CHANGED_TRIGGER"); len(target) != 0 {
-			err = utils.StatusChangedTrigger(target, instance.Name)
+			err = utils.StatusChangedTrigger(target, instance.Name, instance.Namespace)
 			if err != nil {
 				r.log.Error(err, "Status changed trigger start failed")
 			} else {
