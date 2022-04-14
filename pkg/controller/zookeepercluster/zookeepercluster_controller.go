@@ -13,6 +13,7 @@ package zookeepercluster
 import (
 	"context"
 	"fmt"
+	"os"
 	"strconv"
 	"time"
 
@@ -584,6 +585,7 @@ func (r *ReconcileZookeeperCluster) reconcileClusterStatus(instance *zookeeperv1
 	if instance.Status.IsClusterInUpgradingState() || instance.Status.IsClusterInUpgradeFailedState() {
 		return nil
 	}
+	oldStatus := instance.Status.DeepCopy()
 	instance.Status.Init()
 	foundPods := &corev1.PodList{}
 	labelSelector := labels.SelectorFromSet(map[string]string{"app": instance.GetName()})
@@ -637,8 +639,22 @@ func (r *ReconcileZookeeperCluster) reconcileClusterStatus(instance *zookeeperv1
 		"StatefulSet.Name", instance.Name)
 	if instance.Status.ReadyReplicas == instance.Spec.Replicas {
 		instance.Status.SetPodsReadyConditionTrue()
+		// add status trigger to inform the outside
+		if target := os.Getenv("STATUS_CHANGED_TRIGGER"); len(target) != 0 && !oldStatus.IsClusterInReadyState() {
+			err = utils.StatusChangedTrigger(target, instance.Name)
+			if err != nil {
+				r.log.Error(err, "Status changed trigger start failed")
+			}
+		}
 	} else {
 		instance.Status.SetPodsReadyConditionFalse()
+		// add status trigger to inform the outside
+		if target := os.Getenv("STATUS_CHANGED_TRIGGER"); len(target) != 0 && oldStatus.IsClusterInReadyState() {
+			err = utils.StatusChangedTrigger(target, instance.Name)
+			if err != nil {
+				r.log.Error(err, "Status changed trigger start failed")
+			}
+		}
 	}
 	if instance.Status.CurrentVersion == "" && instance.Status.IsClusterInReadyState() {
 		instance.Status.CurrentVersion = instance.Spec.Image.Tag
